@@ -197,7 +197,38 @@ cd suitmediatest
 
 > **Note**: Replace `<repository-url>` with the actual repository URL.
 
-2. **Install dependencies**
+2. **Set up environment variables**
+
+Create a `.env.local` file in the root directory by copying the example file:
+
+```bash
+# Copy the example environment file
+cp .env.example .env.local
+
+# On Windows (PowerShell)
+Copy-Item .env.example .env.local
+```
+
+Then edit `.env.local` and update the values according to your environment:
+
+```env
+# API Configuration
+NEXT_PUBLIC_API_BASE_URL=https://suitmedia-backend.suitdev.com
+
+# Assets CDN URL for images and static assets
+NEXT_PUBLIC_ASSETS_BASE_URL=https://assets.suitdev.com
+
+# Site Configuration
+NEXT_PUBLIC_SITE_URL=https://suitmediatest-wedanta.baguswedanta.com
+```
+
+> **Important**:
+>
+> - The `.env.local` file is automatically ignored by git (already in `.gitignore`)
+> - Never commit sensitive data or API keys to version control
+> - For production, set these variables in your deployment platform's environment settings
+
+3. **Install dependencies**
 
 Choose one of the following package managers:
 
@@ -215,7 +246,7 @@ pnpm install
 bun install
 ```
 
-3. **Run the development server**
+4. **Run the development server**
 
 ```bash
 # Using npm
@@ -231,7 +262,7 @@ pnpm dev
 bun dev
 ```
 
-4. **Open your browser**
+5. **Open your browser**
 
 Once the development server is running, navigate to:
 
@@ -580,18 +611,49 @@ This will start the production server on port 3000 (or the port specified in you
 
 ### Environment Variables
 
-For production deployment, it's recommended to use environment variables. Create a `.env.local` file in the root directory:
+The application uses environment variables for configuration. These are already set up in the codebase.
+
+#### Required Environment Variables
+
+Create a `.env.local` file in the root directory (or copy from `.env.example`):
 
 ```env
 # API Configuration
 NEXT_PUBLIC_API_BASE_URL=https://suitmedia-backend.suitdev.com
+
+# Assets CDN URL for images and static assets
 NEXT_PUBLIC_ASSETS_BASE_URL=https://assets.suitdev.com
 
-# Site Configuration (optional)
+# Site Configuration
 NEXT_PUBLIC_SITE_URL=https://suitmediatest-wedanta.baguswedanta.com
 ```
 
-> **Important**: Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser. Do not use this prefix for sensitive data like API keys.
+#### Environment Variables Explained
+
+| Variable                      | Description                              | Default Value                                    |
+| ----------------------------- | ---------------------------------------- | ------------------------------------------------ |
+| `NEXT_PUBLIC_API_BASE_URL`    | Base URL for the backend API             | `https://suitmedia-backend.suitdev.com`          |
+| `NEXT_PUBLIC_ASSETS_BASE_URL` | CDN URL for images and static assets     | `https://assets.suitdev.com`                     |
+| `NEXT_PUBLIC_SITE_URL`        | Public URL of the website (for metadata) | `https://suitmediatest-wedanta.baguswedanta.com` |
+
+> **Security Note**:
+>
+> - Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser client-side
+> - Never use `NEXT_PUBLIC_` prefix for sensitive data like API keys or secrets
+> - The `.env.local` file is automatically ignored by git (configured in `.gitignore`)
+> - For production deployments, set these variables in your deployment platform's environment settings (Vercel, Netlify, etc.)
+
+#### Setup for Development
+
+1. Copy `.env.example` to `.env.local`:
+
+```bash
+cp .env.example .env.local
+```
+
+2. Edit `.env.local` with your values (if different from defaults)
+
+3. Restart the development server after changing environment variables
 
 ### Deployment Platforms
 
