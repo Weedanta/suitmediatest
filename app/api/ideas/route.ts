@@ -4,8 +4,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
   const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_BASE_URL ||
-    "https://suitmedia-backend.suitdev.com";
+    process.env.NEXT_PUBLIC_API_BASE_URL;
   const baseUrl = `${apiBaseUrl}/api/ideas`;
   const apiUrl = new URL(baseUrl);
 
