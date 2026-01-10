@@ -1,8 +1,22 @@
 import React from "react";
 import Banner from "@/shared/components/banner/Banner";
+import { ArticleList } from "@/shared/components/articles/ArticleList";
+import { fetchIdeasServer } from "@/lib/api/ideas-server";
 
-const IdeasPage = () => {
+const IdeasPage = async () => {
   const bannerImage = "/placeholder-banner.jpg";
+
+  let initialData;
+  try {
+    initialData = await fetchIdeasServer({
+      page: 1,
+      size: 10,
+      sort: "-published_at",
+    });
+  } catch (error) {
+    console.error("Failed to fetch initial data:", error);
+    initialData = { data: [], meta: undefined };
+  }
 
   return (
     <div className="bg-white min-h-screen">
@@ -15,7 +29,7 @@ const IdeasPage = () => {
         backgroundColor="#ffffff"
       />
 
-      <div className="bg-white min-h-screen py-20 px-4 md:px-6 lg:px-8"></div>
+      <ArticleList initialData={initialData} />
     </div>
   );
 };
