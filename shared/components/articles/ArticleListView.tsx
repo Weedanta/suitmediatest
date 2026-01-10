@@ -172,7 +172,7 @@ export const ArticleListView: React.FC<ArticleListViewProps> = ({
                       disabled={loading}
                       className={cn(
                         "h-8 min-w-8 sm:min-w-9 px-2 sm:px-3 text-sm shrink-0",
-                        currentPage === pageNum && "bg-[#FF6B35] text-white"
+                        currentPage === pageNum && "bg-brand-primary text-white"
                       )}
                     >
                       {pageNum}

@@ -57,15 +57,25 @@ const Header = () => {
         <nav
           className={cn(
             "w-full px-4 md:px-6 lg:px-8 transition-all duration-300",
-            isScrolled ? "bg-[#FF6B35]/95 backdrop-blur-sm" : "bg-[#FF6B35]"
+            isScrolled
+              ? "bg-brand-primary-scrolled backdrop-blur-sm"
+              : "bg-brand-primary"
           )}
         >
-          <div className="max-w-7xl mx-auto flex items-center justify-between h-16 md:h-20">         
+          <div className="max-w-7xl mx-auto flex items-center justify-between h-16 md:h-20">
             <Link href="/" className="flex items-center space-x-2 group">
-              <Image src={logo} alt="logo" width={100} height={100} className="brightness-0 invert" draggable={false} loading="lazy"/>
+              <Image
+                src={logo}
+                alt="logo"
+                width={100}
+                height={100}
+                className="brightness-0 invert"
+                draggable={false}
+                loading="lazy"
+              />
             </Link>
 
-            <div className="hidden lg:flex items-center space-x-8"> 
+            <div className="hidden lg:flex items-center space-x-8">
               {navList.map((item) => {
                 const active = isActive(item.href);
                 return (
@@ -75,7 +85,7 @@ const Header = () => {
                     onClick={handleLinkClick}
                     className={cn(
                       "text-white font-normal text-sm md:text-base relative pb-1.5 transition-colors hover:text-white/90",
-                      active && "text-[#f5f5f5]"
+                      active && "text-active"
                     )}
                   >
                     {item.title}
@@ -114,7 +124,7 @@ const Header = () => {
 
       <div
         className={cn(
-          "lg:hidden fixed top-16 md:top-20 right-0 z-40 w-64 h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] bg-[#FF6B35] transition-transform duration-300 shadow-xl",
+          "lg:hidden fixed top-16 md:top-20 right-0 z-40 w-64 h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] bg-brand-primary transition-transform duration-300 shadow-xl",
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
