@@ -48,6 +48,7 @@ export const Select: React.FC<SelectProps> = ({
             height={10}
             className="h-3 w-3 opacity-50 rotate-180"
             draggable={false}
+            loading="lazy"
           />
         </button>
       </DropdownMenuPrimitive.Trigger>

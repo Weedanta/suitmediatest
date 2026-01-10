@@ -66,7 +66,7 @@ export const BannerContent: React.FC<BannerContentProps> = ({
             src={displayImage}
             alt={imageAltText}
             fill
-            priority
+            loading="lazy"
             className="object-cover"
             sizes="100vw"
             quality={90}
