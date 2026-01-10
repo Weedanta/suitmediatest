@@ -51,7 +51,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article, index }) => {
           <h3
             className={cn(
               "text-sm sm:text-base font-semibold text-gray-900 line-clamp-3",
-              "group-hover:text-[#FF6B35] transition-colors duration-200",
+              "group-hover:text-brand-primary transition-colors duration-200",
               "leading-snug"
             )}
           >

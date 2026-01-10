@@ -26,7 +26,7 @@ const IdeasPage = async () => {
         subtitle="Where all our great things begin"
         height="large"
         imageAlt="Ideas banner"
-        backgroundColor="#ffffff"
+        backgroundColor="var(--background-page)"
       />
 
       <ArticleList initialData={initialData} />
