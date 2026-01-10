@@ -62,10 +62,10 @@ const Header = () => {
         >
           <div className="max-w-7xl mx-auto flex items-center justify-between h-16 md:h-20">         
             <Link href="/" className="flex items-center space-x-2 group">
-              <Image src={logo} alt="logo" width={100} height={100} className="brightness-0 invert"/>
+              <Image src={logo} alt="logo" width={100} height={100} className="brightness-0 invert" draggable={false} loading="lazy"/>
             </Link>
 
-            <div className="hidden lg:flex items-center space-x-8">
+            <div className="hidden lg:flex items-center space-x-8"> 
               {navList.map((item) => {
                 const active = isActive(item.href);
                 return (
@@ -74,13 +74,13 @@ const Header = () => {
                     href={item.href}
                     onClick={handleLinkClick}
                     className={cn(
-                      "text-white font-medium text-sm md:text-base relative pb-1 transition-colors hover:text-white/90",
-                      active && "text-white"
+                      "text-white font-normal text-sm md:text-base relative pb-1.5 transition-colors hover:text-white/90",
+                      active && "text-[#f5f5f5]"
                     )}
                   >
                     {item.title}
                     {active && (
-                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
+                      <span className="absolute bottom-0 left-0 right-0 h-1 bg-white" />
                     )}
                   </Link>
                 );
