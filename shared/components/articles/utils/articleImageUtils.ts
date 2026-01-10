@@ -4,6 +4,10 @@ export const getArticleImageUrl = (article: Article): string | null => {
   const mediumImage = article.medium_image;
   const smallImage = article.small_image;
 
+  // Get assets base URL from environment variable
+  const assetsBaseUrl =
+    process.env.NEXT_PUBLIC_ASSETS_BASE_URL || "https://assets.suitdev.com";
+
   const getUrlFromImageArray = (
     images: ArticleImage[] | undefined
   ): string | null => {
@@ -26,10 +30,10 @@ export const getArticleImageUrl = (article: Article): string | null => {
     }
 
     if (url.startsWith("/")) {
-      return `https://assets.suitdev.com${url}`;
+      return `${assetsBaseUrl}${url}`;
     }
 
-    return `https://assets.suitdev.com/${url}`;
+    return `${assetsBaseUrl}/${url}`;
   };
 
   const mediumUrl = getUrlFromImageArray(mediumImage);

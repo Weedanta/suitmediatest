@@ -1,0 +1,16 @@
+{
+  "files.associations": {
+    "*.env*": "dotenv",
+    ".env.local": "dotenv",
+    ".env.example": "dotenv"
+  },
+  "files.watcherExclude": {
+    "**/.env.local": true
+  },
+  "[dotenv]": {
+    "editor.defaultFormatter": null,
+    "editor.quickSuggestions": {
+      "strings": true
+    }
+  }
+}

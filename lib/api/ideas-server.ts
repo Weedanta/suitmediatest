@@ -48,7 +48,11 @@ export const fetchIdeasServer = async (
 ): Promise<IdeasResponse> => {
   const { page = 1, size = 10, sort = "-published_at" } = params;
 
-  const baseUrl = "https://suitmedia-backend.suitdev.com/api/ideas";
+  // Get API base URL from environment variable
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    "https://suitmedia-backend.suitdev.com";
+  const baseUrl = `${apiBaseUrl}/api/ideas`;
   const apiUrl = new URL(baseUrl);
 
   apiUrl.searchParams.append("page[number]", page.toString());
