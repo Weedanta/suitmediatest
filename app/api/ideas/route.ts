@@ -7,13 +7,9 @@ export async function GET(request: NextRequest) {
   const apiUrl = new URL(baseUrl);
 
   const page =
-    searchParams.get("page[number]") ||
-    searchParams.get("page") ||
-    "1";
+    searchParams.get("page[number]") || searchParams.get("page") || "1";
   const size =
-    searchParams.get("page[size]") ||
-    searchParams.get("size") ||
-    "10";
+    searchParams.get("page[size]") || searchParams.get("size") || "10";
   const sort = searchParams.get("sort") || "-published_at";
 
   apiUrl.searchParams.append("page[number]", page);
@@ -21,6 +17,9 @@ export async function GET(request: NextRequest) {
   apiUrl.searchParams.append("append[]", "small_image");
   apiUrl.searchParams.append("append[]", "medium_image");
   apiUrl.searchParams.append("sort", sort);
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
   try {
     const response = await fetch(apiUrl.toString(), {
@@ -30,52 +29,90 @@ export async function GET(request: NextRequest) {
         "Content-Type": "application/json",
       },
       cache: "no-store",
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       let errorData: string | object;
       const contentType = response.headers.get("content-type");
-      
+
       try {
         if (contentType?.includes("application/json")) {
           errorData = await response.json();
         } else {
           errorData = await response.text();
         }
-      } catch (parseError) {
-        errorData = `Unable to parse error response: ${parseError}`;
+      } catch {
+        errorData = "Unable to parse error response";
       }
 
       console.error("Backend API Error:", response.status, errorData);
-      
+
       return NextResponse.json(
         {
           error: "Failed to fetch ideas",
           status: response.status,
-          details: typeof errorData === "string" ? errorData : JSON.stringify(errorData),
+          message:
+            typeof errorData === "string"
+              ? errorData
+              : JSON.stringify(errorData),
         },
         { status: response.status }
       );
     }
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (parseError) {
+      console.error("Error parsing JSON response:", parseError);
+      return NextResponse.json(
+        {
+          error: "Invalid response",
+          message: "The API returned an invalid response format",
+        },
+        { status: 502 }
+      );
+    }
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error in API route handler:", error);
-    const errorMessage =
-      error instanceof Error
-        ? error.message
-        : typeof error === "string"
-        ? error
-        : "Unknown error occurred";
-    
+    clearTimeout(timeoutId);
+
+    if (error instanceof Error && error.name === "AbortError") {
+      console.error("Request timeout:", apiUrl.toString());
+      return NextResponse.json(
+        {
+          error: "Request timeout",
+          message: "The request took too long to complete",
+        },
+        { status: 504 }
+      );
+    }
+
+    console.error(
+      "Error in API route handler:",
+      error instanceof Error ? error.message : error
+    );
+
+    const isNetworkError =
+      error instanceof Error &&
+      (error.message.includes("fetch failed") ||
+        error.message.includes("ECONNREFUSED") ||
+        error.message.includes("ENOTFOUND") ||
+        error.message.includes("ETIMEDOUT") ||
+        error.message.includes("network") ||
+        error.name === "AbortError");
+
     return NextResponse.json(
       {
-        error: "Internal server error",
-        message: errorMessage,
-        details: error instanceof Error ? error.stack : undefined,
+        error: isNetworkError ? "Network error" : "Internal server error",
+        message: isNetworkError
+          ? "Unable to connect to the API server. Please check your network connection."
+          : "An error occurred while fetching data. Please try again later.",
       },
-      { status: 500 }
+      { status: isNetworkError ? 503 : 500 }
     );
   }
 }
