@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import type { Article } from "@/lib/api/ideas";
 import { getArticleImageUrl } from "./utils/articleImageUtils";
 import { formatArticleDate } from "./utils/articleDateUtils";
+import { robotoCondensed } from "./utils/articleFont";
 
 interface ArticleCardProps {
   article: Article;
@@ -22,16 +23,16 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      className="group cursor-pointer"
+      className={cn("group cursor-pointer", robotoCondensed.className)}
     >
-      <div className="flex flex-col h-full bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-        <div className="relative w-full aspect-[4/3] bg-gray-200 overflow-hidden">
+      <div className="flex flex-col h-full bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md sm:hover:shadow-2xl transition-shadow duration-300">
+        <div className="relative w-full aspect-[4/3] bg-gray-200 overflow-hidden rounded-t-lg">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={article.title || "Article image"}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
               unoptimized
@@ -43,14 +44,15 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article, index }) => {
           )}
         </div>
 
-        <div className="flex flex-col flex-1 p-4">
-          <time className="text-sm text-gray-500 mb-2 uppercase">
+        <div className="flex flex-col flex-1 p-4 sm:p-5">
+          <time className="text-xs sm:text-sm font-medium text-gray-500 mb-2">
             {publishedDate}
           </time>
           <h3
             className={cn(
-              "text-base font-medium text-gray-900 line-clamp-3",
-              "group-hover:text-[#FF6B35] transition-colors duration-200"
+              "text-sm sm:text-base font-semibold text-gray-900 line-clamp-3",
+              "group-hover:text-[#FF6B35] transition-colors duration-200",
+              "leading-snug"
             )}
           >
             {article.title}

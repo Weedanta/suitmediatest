@@ -44,8 +44,6 @@ export const useArticleList = ({
     initialData.meta &&
     typeof initialData.meta.total === "number";
 
-  const hasValidInitialDataRef = useRef(hasValidInitialData);
-
   const [pageState, setPageState] = useState<ArticlePageState>(() => {
     return { page: 1, size: 10, sort: "-published_at" };
   });
@@ -163,9 +161,49 @@ export const useArticleList = ({
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && meta && newPage <= (meta.last_page || 1)) {
       updateState({ page: newPage });
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
+
+  const prevPageRef = useRef(page);
+  const prevSortRef = useRef(sort);
+  const prevSizeRef = useRef(size);
+  const shouldScrollRef = useRef(false);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const pageChanged = prevPageRef.current !== page;
+    const sortChanged = prevSortRef.current !== sort;
+    const sizeChanged = prevSizeRef.current !== size;
+
+    if (pageChanged || sortChanged || sizeChanged) {
+      shouldScrollRef.current = true;
+      prevPageRef.current = page;
+      prevSortRef.current = sort;
+      prevSizeRef.current = size;
+    }
+
+    if (shouldScrollRef.current && !loading && articles.length > 0) {
+      setTimeout(() => {
+        const articleListSection = document.querySelector(
+          "[data-article-list]"
+        );
+        if (articleListSection) {
+          const offsetTop =
+            articleListSection.getBoundingClientRect().top +
+            window.pageYOffset -
+            80;
+          window.scrollTo({
+            top: Math.max(0, offsetTop),
+            behavior: "smooth",
+          });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        shouldScrollRef.current = false;
+      }, 100);
+    }
+  }, [page, sort, size, loading, articles.length, isMounted]);
 
   const totalPages = meta?.last_page || 1;
   const currentPage = meta?.current_page || page;
