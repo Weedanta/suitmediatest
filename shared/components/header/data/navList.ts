@@ -1,10 +1,5 @@
 export const navList = [
   {
-    id: "Home",
-    title: "Home",
-    href: "/",
-  },
-  {
     id: "Work",
     title: "Work",
     href: "/work",
@@ -13,12 +8,17 @@ export const navList = [
     id: "About",
     title: "About",
     href: "/about",
-  }, 
+  },
+  {
+    id: "Services",
+    title: "Services",
+    href: "/services",
+  },
   {
     id: "Ideas",
     title: "Ideas",
     href: "/ideas",
-  }, 
+  },
   {
     id: "Careers",
     title: "Careers",
@@ -28,5 +28,5 @@ export const navList = [
     id: "Contact",
     title: "Contact",
     href: "/contact",
-  }
-]
+  },
+];
