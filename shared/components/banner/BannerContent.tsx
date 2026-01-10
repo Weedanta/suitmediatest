@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import { motion, MotionValue } from "framer-motion";
 import {
@@ -6,6 +8,7 @@ import {
   getImageSource,
   getImageAlt,
 } from "./utils/bannerUtils";
+import defaultBackground from "@/shared/assets/ideas/homepage_background.webp";
 
 interface BannerContentProps {
   image: string | { src: string; alt: string };
@@ -34,6 +37,16 @@ export const BannerContent: React.FC<BannerContentProps> = ({
 }) => {
   const imageSrc = getImageSource(image);
   const imageAltText = getImageAlt(image, imageAlt);
+  const [hasError, setHasError] = useState(false);
+
+  const displayImage =
+    hasError || !imageSrc || imageSrc.trim() === ""
+      ? defaultBackground
+      : imageSrc;
+
+  const handleImageError = () => {
+    setHasError(true);
+  };
 
   return (
     <div
@@ -44,17 +57,23 @@ export const BannerContent: React.FC<BannerContentProps> = ({
         ref={containerRef}
         className={`relative w-full overflow-hidden ${HEIGHT_CLASSES[height]}`}
       >
-        <motion.div style={{ y: imageY, opacity }} className="absolute inset-0">
+        <motion.div
+          style={{ y: imageY, opacity }}
+          className="absolute inset-0"
+          key={imageSrc || "default"}
+        >
           <Image
-            src={imageSrc}
+            src={displayImage}
             alt={imageAltText}
             fill
             priority
             className="object-cover"
             sizes="100vw"
             quality={90}
+            onError={handleImageError}
+            unoptimized={displayImage === defaultBackground}
           />
-          <div className="absolute inset-0 bg-black" />
+          <div className="absolute inset-0 bg-black/30" />
         </motion.div>
 
         {(title || subtitle) && (

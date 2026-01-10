@@ -71,14 +71,19 @@ export const fetchIdeas = async (
       let errorMessage = `Failed to fetch ideas: ${response.statusText}`;
       try {
         const errorData = await response.json();
-        errorMessage = errorData.error || errorData.message || errorMessage;
-        if (errorData.details) {
-          console.error("API Error Details:", errorData.details);
-        }
+        errorMessage = errorData.message || errorData.error || errorMessage;
       } catch {
         try {
           const errorText = await response.text();
-          console.error("API Error Response:", errorText);
+          if (errorText) {
+            try {
+              const parsedError = JSON.parse(errorText);
+              errorMessage =
+                parsedError.message || parsedError.error || errorMessage;
+            } catch {
+              errorMessage = errorText;
+            }
+          }
         } catch {
           console.error("Unable to read error response");
         }

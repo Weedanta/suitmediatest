@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { Check, ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import DropDownIcon from "@/shared/assets/icon/dropdown.png";
 
 interface SelectOption {
   value: string;
@@ -32,14 +34,21 @@ export const Select: React.FC<SelectProps> = ({
       <DropdownMenuPrimitive.Trigger asChild>
         <button
           className={cn(
-            "flex h-10 w-full items-center justify-between rounded-full border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            "flex h-10 w-full items-center justify-between rounded-full border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2  focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
             className
           )}
         >
           <span className={cn(!selectedOption && "text-muted-foreground")}>
             {selectedOption?.label || placeholder}
           </span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
+          <Image
+            src={DropDownIcon}
+            alt="dropdown"
+            width={10}
+            height={10}
+            className="h-3 w-3 opacity-50 rotate-180"
+            draggable={false}
+          />
         </button>
       </DropdownMenuPrimitive.Trigger>
       <DropdownMenuPrimitive.Portal>
